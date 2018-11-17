@@ -1,0 +1,69 @@
+---
+# A questionnaire for when a landlord will not fix a broken couch
+EMAIL:
+  prompt: Hi, what's your email?
+  type: email
+  start: True
+  then: NAME
+
+NAME:
+  prompt: Hi, what's your name?
+  type: text
+  then: COUCH_ISSUES
+
+COUCH_ISSUES:
+  type: multiple choice
+  prompt: What's wrong with your couch?
+  options:
+    - It is on fire
+    - It is missing
+    - It smells real bad
+  details:
+    - when: COUCH_ISSUES contains It is on fire
+      then: COUCH_FIRE_TIME
+    - when: COUCH_ISSUES contains It is missing
+      then: COUCH_MISSING
+    - when: COUCH_ISSUES contains It smells real bad
+      then: COUCH_SMELL_RATING
+  then: HAS_CONTACTED_LANDLORD
+
+COUCH_FIRE_TIME:
+  prompt: When did your couch first catch fire?
+  type: info
+
+COUCH_SMELL_RATING:
+  prompt: On a scale of 1-10, how bad does your couch smell?
+  type: number
+
+COUCH_MISSING:
+  prompt: When did your couch go missing?
+  type: date
+
+HAS_CONTACTED_LANDLORD:
+  prompt: Have you contacted your landlord about this issue?
+  type: boolean
+  then:
+    - when: HAS_CONTACTED_LANDLORD is True
+      then: COST_OF_DAMAGES
+    - when: HAS_CONTACTED_LANDLORD is False
+      then: CONTACT_LANDLORD_CTA
+
+CONTACT_LANDLORD_CTA:
+  prompt: We can't help you until you contact your landlord.
+  type: info
+
+COST_OF_DAMAGES:
+  prompt: How much money do you think it will cost to fix?
+  type: number
+  then:
+    - when: COST_OF_DAMAGES is greater than 1000
+      then: COST_OF_DAMAGES_TOO_HIGH
+    - then: CONTACT_SOON
+
+COST_OF_DAMAGES_TOO_HIGH:
+  prompt: We can't help you because that's too much money, we recommend you move to France.
+  type: info
+
+CONTACT_SOON:
+  prompt: We will contact you soon.
+  type: info

@@ -1,0 +1,58 @@
+---
+# Tests for the landlord questionnaire
+- test_name: Test couch on fire path
+  test_steps:
+    - name: NAME
+      data: Matt
+    - name: COUCH_ISSUES
+      data: It is on fire
+    - name: COUCH_FIRE_TIME
+      data: 01/01/2018
+    - name: HAS_CONTACTED_LANDLORD
+      data: True
+    - name: COST_OF_DAMAGES
+      data: 200
+    - name: CONTACT_SOON
+  expected_data:
+    NAME: Matt
+    COUCH_ISSUES: It is on fire
+    COUCH_FIRE_TIME: 01/01/2018
+    HAS_CONTACTED_LANDLORD: True
+    COST_OF_DAMAGES: 200
+
+- test_name: Test didn't contact landlord
+  test_steps:
+    - name: NAME
+      data: Matt
+    - name: COUCH_ISSUES
+      data: It is on fire
+    - name: COUCH_FIRE_TIME
+      data: 01/01/2018
+    - name: HAS_CONTACTED_LANDLORD
+      data: False
+    - name: CONTACT_LANDLORD_CTA
+  expected_data:
+    NAME: Matt
+    COUCH_ISSUES: It is on fire
+    COUCH_FIRE_TIME: 01/01/2018
+    HAS_CONTACTED_LANDLORD: False
+
+- test_name: Test damages too expensive
+  test_steps:
+    - name: NAME
+      data: Matt
+    - name: COUCH_ISSUES
+      data: It is on fire
+    - name: COUCH_FIRE_TIME
+      data: 01/01/2018
+    - name: HAS_CONTACTED_LANDLORD
+      data: True
+    - name: COST_OF_DAMAGES
+      data: 1001
+    - name: COST_OF_DAMAGES_TOO_HIGH
+  expected_data:
+    NAME: Matt
+    COUCH_ISSUES: It is on fire
+    COUCH_FIRE_TIME: 01/01/2018
+    HAS_CONTACTED_LANDLORD: True
+    COST_OF_DAMAGES: 1001
