@@ -43,11 +43,14 @@ spec
 - customisable component for each data type
 - option to save (email a magic link)
 - ability to go back and change answer (will invalidate other questions)
+- template answer into future questions as variables
+- allow questionnaire to double check critical answers
 """
 import yaml
 
 import spec_validator
-
+import spec_parser
+import script_executor
 
 def main():
     with open('landlord.yml', 'r') as f:
@@ -62,8 +65,10 @@ def main():
         print('')
         return
 
-
-
+    script = spec_parser.parse(spec)
+    data = script_executor.execute(script)
+    import pprint
+    pprint.pprint(data)
 
 if __name__ == '__main__':
     main()

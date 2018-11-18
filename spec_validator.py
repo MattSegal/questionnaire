@@ -1,33 +1,9 @@
-FIELD_KEYS = {
-    'start',
-    'prompt',
-    'options',
-    'help',
-    'details',
-    'then',
-}
-FIELD_TYPES = {
-    'text',
-    'email',
-    'multiple choice',
-    'single choice',
-    'boolean',
-    'date',
-    'info',
-    'number',
-}
+from constants import FIELD_KEYS, FIELD_TYPES, CONDITIONS
+
 TYPE_VALIDATORS = {
     'multiple choice': lambda *args: validate_choice_field(*args),
     'single choice':  lambda *args: validate_choice_field(*args),
 }
-CONDITIONS = [
-    'is',
-    'is not',
-    'contains', # (falls back to is)
-    'not contains', # (falls back to is not)
-    'is greater than', # (int)
-    'is less than', # (int)
-]
 
 
 def validate(spec):
@@ -178,6 +154,23 @@ def validate_choice_field(field, field_spec, add_error):
     """
     Ensure the field has an options key,
     which should be a list and each option should be truthy
+
+    CURRENTLY
+
+    options:
+        - aaa
+        - bbb
+        - ccc
+
+    TODO: support
+
+    options:
+        - option: XXX
+          hint: YYY
+        - option: XXX
+          hint: YYY
+        - option: XXX
+          hint: YYY
     """
     options = field_spec.get('options')
     if not options:

@@ -13,7 +13,7 @@ NAME:
 
 COUCH_ISSUES:
   type: multiple choice
-  prompt: What's wrong with your couch?
+  prompt: Ok {NAME}, what's wrong with your couch?
   options:
     - It is on fire
     - It is missing
