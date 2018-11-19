@@ -5,12 +5,15 @@ def execute(script):
     """
     Executes the script then returns data
     """
-    data = script['data']
+    data = {f: None for f in script['data_fields']}
     step_name = script['start']
     step = script['steps'][step_name]
 
     while step:
-        data[step_name] = get_user_input(step, data)
+        response = get_user_input(step, data)
+        if step_name in script['data_fields']:
+            data[step_name] = response
+
         # TODO - details
 
         step_name = None
@@ -40,12 +43,11 @@ def evaluate_when(when, data):
     """
     Returns True if when condition is met.
     """
-    print(when, data)
     variable = data.get(when['variable'])
     condition = when['condition']
     value = when['value']
     condition_func = CONDITION_FUNCS[condition]
-    return condition_func(variable, val)
+    return condition_func(variable, value)
 
 
 CONDITION_FUNCS = {
@@ -53,8 +55,8 @@ CONDITION_FUNCS = {
     'is not': lambda var, val: var != val,
     'contains': lambda var, val: contains(var, val),
     'not contains': lambda var, val: not contains(var, val),
-    'is greater than': lambda var, val: var > val,
-    'is less than': lambda var, val: var < val,
+    'is greater than': lambda var, val: int(var) > int(val),
+    'is less than': lambda var, val: int(var) < int(val),
 }
 
 def contains(var, val):

@@ -2,6 +2,8 @@
 display questoions for each field type
 validate data input for each field type
 """
+from datetime import datetime
+
 
 def get_user_input(step, data):
     # Replace prompt with templated values
@@ -42,10 +44,11 @@ class DataCollector:
     def is_response_valid(self, response):
         return bool(response)
 
+
     def collect(self):
         response = None
         while not self.is_response_valid(response):
-            response = input(self.get_prompt())
+            response = get_input(self.get_prompt())
             print()
             if not self.is_response_valid(response):
                 self.print_error()
@@ -91,8 +94,12 @@ class MultipleChoiceCollector(DataCollector):
 
     def collect(self):
         response = super().collect()
-        response_idx = self.OPTIONS.index(response)
-        return self.options[response_idx]
+        responses = []
+        for r in response:
+            response_idx = self.OPTIONS.index(response)
+            responses.append(self.options[response_idx])
+
+        return responses
 
 
 class SingleChoiceCollector(MultipleChoiceCollector):
@@ -105,6 +112,11 @@ class SingleChoiceCollector(MultipleChoiceCollector):
             for r in response
         ])
 
+    def collect(self):
+        response = super(MultipleChoiceCollector, self).collect()
+        response_idx = self.OPTIONS.index(response)
+        return self.options[response_idx]
+
 
 class BooleanCollector(SingleChoiceCollector):
     OPTIONS = ['y', 'n']
@@ -114,17 +126,49 @@ class BooleanCollector(SingleChoiceCollector):
         self.options = [True, False]
 
     def print_error(self):
-        print('You must answer "yes" or "no" continue\n')
+        print('You must answer "y" or "n" continue\n')
 
 
 class DateCollector(DataCollector):
-    pass
+    def print_error(self):
+        print('You must provide a valid date in format DD/MM/YYYY to continue\n')
 
+    def is_response_valid(self, response):
+        try:
+            datetime.strptime(response, '%d/%m/%Y')
+            return True
+        except (ValueError, TypeError):
+            return False
 
-class InfoCollector(DataCollector):
-    pass
+    def collect(self):
+        response = super().collect()
+        return datetime.strptime(response, '%d/%m/%Y')
 
 
 class NumberCollector(DataCollector):
-    pass
+    def print_error(self):
+        print('You must provide an integer to continue\n')
 
+    def is_response_valid(self, response):
+        try:
+            int(response)
+            return True
+        except (ValueError, TypeError):
+            return False
+
+    def collect(self):
+        response = super().collect()
+        return int(response)
+
+
+class InfoCollector(DataCollector):
+    def collect(self):
+        get_input(self.prompt + '\nPress ENTER to continue...\n')
+        return None
+
+
+def get_input(text):
+    """
+    Wrapper for builting `input`, allows us to mock this in unit tests.
+    """
+    return input(text)

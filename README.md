@@ -36,10 +36,7 @@ These apps will return a data object which can be stored sever-side:
 
 ```json
 {
-    "CONTACT_LANDLORD_CTA": null,
-    "CONTACT_SOON": null,
     "COST_OF_DAMAGES": null,
-    "COST_OF_DAMAGES_TOO_HIGH": null,
     "COUCH_FIRE_TIME": null,
     "COUCH_ISSUES": ["It is on fire"],
     "COUCH_MISSING": null,
@@ -82,6 +79,7 @@ make run
 
 ## TODO
 
+- get details working
 - add unit tests
 - each question needs a hint
 - each answer option needs hint

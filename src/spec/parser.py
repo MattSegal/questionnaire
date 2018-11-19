@@ -14,7 +14,10 @@ def parse(spec):
     fields = set(spec.keys())
     script = {
         'start': None,
-        'data': {field: None for field in fields},
+        'data_fields': {
+            field for field in fields
+            if spec[field]['type'] != 'info'
+        },
         'steps': {},
     }
     # Fill out steps
@@ -22,12 +25,14 @@ def parse(spec):
         step = {}
         for key, val in spec[field].items():
             if key in ('details', 'then') and type(val) is list:
-                element = {}
+                step[key] = []
                 for el in val:
+                    element = {}
                     element['then'] = el['then']
                     # Parse 'when' fields
                     when = el.get('when')
                     if not when:
+                        step[key].append(element)
                         continue
 
                     fragments = when.split(' ')
@@ -50,6 +55,7 @@ def parse(spec):
                         'condition': condition,
                         'value': value
                     }
+                    step[key].append(element)
             else:
                 step[key] = val
 

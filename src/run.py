@@ -17,9 +17,9 @@ def main():
         return
 
     script = parser.parse(spec)
-    data = executor.execute(script)
-    import pprint
-    pprint.pprint(data)
+    import json
+    print(json.dumps(script))
+    # data = executor.execute(script)
 
 if __name__ == '__main__':
     main()

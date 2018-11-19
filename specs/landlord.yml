@@ -3,7 +3,7 @@
 EMAIL:
   prompt: Hi, what's your email?
   type: email
-  start: True
+  start: False
   then: NAME
 
 NAME:
@@ -40,6 +40,7 @@ COUCH_MISSING:
   type: date
 
 HAS_CONTACTED_LANDLORD:
+  start: True
   prompt: Have you contacted your landlord about this issue?
   type: boolean
   then:
