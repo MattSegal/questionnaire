@@ -4,7 +4,7 @@ ie. we want to try handle any complexity or weirdness here
 
 - parse when fields
 """
-from constants import FIELD_KEYS, FIELD_TYPES, CONDITIONS
+from ..constants import FIELD_KEYS, FIELD_TYPES, CONDITIONS
 
 
 def parse(spec):
@@ -38,7 +38,13 @@ def parse(spec):
                         if c == condition_and_value[0:len(c)]:
                             condition = c
 
+
                     value = condition_and_value[len(condition):].strip()
+                    if value.lower() == 'true':
+                        value = True
+                    elif value.lower() == 'false':
+                        value = False
+
                     element['when'] = {
                         'variable': variable,
                         'condition': condition,

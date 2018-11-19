@@ -1,4 +1,4 @@
-from script_fields import get_user_input
+from .fields import get_user_input
 
 
 def execute(script):
@@ -40,6 +40,7 @@ def evaluate_when(when, data):
     """
     Returns True if when condition is met.
     """
+    print(when, data)
     variable = data.get(when['variable'])
     condition = when['condition']
     value = when['value']

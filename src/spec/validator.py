@@ -1,4 +1,4 @@
-from constants import FIELD_KEYS, FIELD_TYPES, CONDITIONS
+from ..constants import FIELD_KEYS, FIELD_TYPES, CONDITIONS
 
 TYPE_VALIDATORS = {
     'multiple choice': lambda *args: validate_choice_field(*args),
