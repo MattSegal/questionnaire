@@ -67,24 +67,28 @@ A user can also create behavioural tests for their spec (see `forms/`) which can
 ## Development
 
 ```bash
-# Setup virtual env, requires virtualenv + python3
-make setup
-
 # Run unit tests
 make test
 
 # Run questionnaire
 make run
+
+# Setup virtual env, requires virtualenv + python3
+virtualenv -p python3 env
+pip3 install -r requirements.txt
+
+# Install JS requirements and build frontend
+yarn install
+yarn run build
 ```
 
 ## TODO
 
-- get details working
-- add unit tests
+- create client-side form builder in React
 - each question needs a hint
 - each answer option needs hint
-- nail down YAML format
-- run behavioural tests
+- nail down YAML format (scrap YAML, just use JSON?)
+- run user defined behavioural tests
 - parser to validate input
     - correct values
     - correct operators

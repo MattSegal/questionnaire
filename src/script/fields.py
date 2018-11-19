@@ -96,7 +96,7 @@ class MultipleChoiceCollector(DataCollector):
         response = super().collect()
         responses = []
         for r in response:
-            response_idx = self.OPTIONS.index(response)
+            response_idx = self.OPTIONS.index(r)
             responses.append(self.options[response_idx])
 
         return responses

@@ -7,25 +7,41 @@ def execute(script):
     """
     data = {f: None for f in script['data_fields']}
     step_name = script['start']
-    step = script['steps'][step_name]
-
-    while step:
-        response = get_user_input(step, data)
-        if step_name in script['data_fields']:
-            data[step_name] = response
-
-        # TODO - details
-
-        step_name = None
-        then = step.get('then')
-        if type(then) is str:
-            step_name = then
-        elif type(then) is list:
-            step_name = get_then_from_options(then, data)
-
-        step = script['steps'].get(step_name)
+    while step_name:
+        step_name = run_step(step_name, script, data)
 
     return data
+
+
+def run_step(step_name, script, data):
+    """
+    Runs a single step of the questionnaire,
+    also runs any follow questions, as specified by 'details'
+    """
+    print(step_name)
+    step = script['steps'].get(step_name)
+    if not step:
+        return
+
+    response = get_user_input(step, data)
+    if step_name in script['data_fields']:
+        data[step_name] = response
+
+    # Execute any follow up details in a depth-first manner.
+    details = step.get('details', [])
+    for detail in details:
+        if evaluate_when(detail['when'], data):
+            detail_step_name = detail['then']
+            while detail_step_name:
+                detail_step_name = run_step(detail_step_name, script, data)
+
+    next_step_name = None
+    then = step.get('then')
+    if type(then) is str:
+        return then
+    elif type(then) is list:
+        return get_then_from_options(then, data)
+
 
 
 def get_then_from_options(then, data):
@@ -60,7 +76,7 @@ CONDITION_FUNCS = {
 }
 
 def contains(var, val):
-    if type(val) is list:
-        return var in val
+    if type(var) is list:
+        return val in var
     else:
-        return var == val
+        return val == var

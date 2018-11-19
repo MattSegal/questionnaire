@@ -8,6 +8,7 @@ TEST_SCRIPT = {
         'RUNS_PER_WEEK',
         'FAVOURITE_SHOE',
         'RUNNING_SURFACES',
+        'LIKES_GRASS',
     },
     'steps': {
         'NAME': {
@@ -59,10 +60,13 @@ TEST_SCRIPT = {
             'type': 'multiple choice',
             'options': ['Grass', 'Asphalt', 'Water'],
             'details': [
-                {'then': 'NIKE_SUCKS', 'when': {'variable': 'RUNNING_SURFACES', 'condition': 'contains', 'value': 'Water'}},
-                {'then': 'NIKE_SUCKS', 'when': {'variable': 'RUNNING_SURFACES', 'condition': 'contains', 'value': 'Grass'}},
+                {'then': 'LIKES_GRASS', 'when': {'variable': 'RUNNING_SURFACES', 'condition': 'contains', 'value': 'Grass'}},
             ],
             'then': 'THANKS',
+        },
+        'LIKES_GRASS': {
+            'prompt': 'Do you like running on grass?',
+            'type': 'boolean',
         },
         'THANKS': {
             'prompt': 'Cool, thanks!',

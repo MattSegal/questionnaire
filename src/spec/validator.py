@@ -108,6 +108,8 @@ def validate_conditional_then(element, key_name, field, field_spec, fields, add_
             - value may be an integer, "string", True False
             - variable must be a question name
             - condition must be one of CONDITIONS
+
+    TODO: Details must have a when field
     """
     then = element.get('then')
     when = element.get('when')
