@@ -12,9 +12,9 @@ export default class BuilderForm extends Component {
       <div>
         <AddQuestionForm />
         <h2 className="mt-3">Questions</h2>
-        {Object.keys(script.steps)
+        {Object.keys(script)
           .map(k => (
-            <Question key={k} question={script['steps'][k]} />
+            <Question key={k} question={script[k]} />
           )
         )}
       </div>

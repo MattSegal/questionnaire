@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { actions } from 'state'
 import ScriptValidator from 'validator'
+import InputField from 'components/generic/input-field'
+import CheckboxField from 'components/generic/checkbox-field'
+import DropdownField from 'components/generic/dropdown-field'
+import Button from 'components/generic/button'
+import ErrorList from 'components/generic/error-list'
 import {
   FIELD_KEYS,
   FIELD_TYPES,
@@ -20,27 +25,24 @@ const FIELD_TYPES_DISPLAY = {
   'number': 'Number',
 }
 
+const INITIAL_STATE = {
+  errors: [],
+  // Question fields
+  name: '',
+  prompt: '',
+  type: '',
+  then: '',
+  start: false,
+}
 
 export default class AddQuestionForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      errors: {},
-      // Question fields
-      name: '',
-      prompt: '',
-      type: '',
-    }
+    this.state = {...INITIAL_STATE}
   }
 
-  onNameInput = e =>
-    this.setState({ name: e.target.value })
-
-  onPromptInput = e =>
-    this.setState({ prompt: e.target.value })
-
-  onTypeInput = e =>
-    this.setState({ type: e.target.value })
+  onInput = fieldName => e =>
+    this.setState({ [fieldName]: e.target.value })
 
   onSubmit = e => {
     const question = this.getQuestion()
@@ -48,8 +50,10 @@ export default class AddQuestionForm extends Component {
     const isValid = validator.canAddQuestion(question)
     if (isValid) {
       this.props.addQuestion(question)
+      this.setState({...INITIAL_STATE})
+    } else {
+      this.setState({ errors: validator.errors })
     }
-    this.setState({ errors: validator.errors})
   }
 
   getQuestion = () =>
@@ -59,72 +63,53 @@ export default class AddQuestionForm extends Component {
       .reduce((obj, [k, v]) => ({...obj, [k]: v}), {})
 
   render() {
-    const { name, prompt, type, validator, errors } = this.state
-    const { addQuestion } = this.props
+    const { name, start, prompt, type, then, validator, errors } = this.state
+    const { addQuestion, script } = this.props
     return (
       <div>
-        <div className="input-group mb-3">
-
-          <div className="input-group-prepend">
-            <span className="input-group-text">Name</span>
-          </div>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="eg. 'HAS_CONTACTED_LANDLORD'"
-            value={name}
-            onChange={this.onNameInput}
-          />
-        </div>
-
-        <div className="input-group mb-3">
-          <div className="input-group-prepend">
-            <span className="input-group-text">Type</span>
-          </div>
-          <select className="form-control" onChange={this.onTypeInput} selected={type}>
-            <option value="">Select a data type</option>
-            {FIELD_TYPES.map(fieldType => (
-              <option key={fieldType} value={fieldType}>{FIELD_TYPES_DISPLAY[fieldType]}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="input-group mb-3">
-          <div className="input-group-prepend">
-            <span className="input-group-text">Prompt</span>
-          </div>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Question prompt - eg. 'Have you contacted your landlord?'"
-            value={prompt}
-            onChange={this.onPromptInput}
-          />
-        </div>
-
-        <button className="btn btn-primary mb-2" onClick={this.onSubmit}
-        >
+        <InputField
+          label="Name"
+          type="text"
+          placeholder="A description of the question eg. 'Has contacted landlord'"
+          value={name}
+          onChange={this.onInput('name')}
+        />
+        <InputField
+          label="Prompt"
+          type="text"
+          placeholder="Question prompt - eg. 'Have you contacted your landlord?'"
+          value={prompt}
+          onChange={this.onInput('prompt')}
+        />
+        <DropdownField
+          label="Type"
+          placeholder="Select question data type"
+          value={type}
+          onChange={this.onInput('type')}
+          options={FIELD_TYPES.map(fieldType => [fieldType, FIELD_TYPES_DISPLAY[fieldType]])}
+        />
+        <DropdownField
+          label="Then"
+          placeholder="Select the next question"
+          value={then}
+          onChange={this.onInput('then')}
+          disabled={Object.keys(script).length < 1}
+          options={Object.keys(script).map(k => [k, k])}
+        />
+        <CheckboxField
+          label="Starting question"
+          value={start}
+          disabled={Object.values(script).some(q => q.start)}
+          onChange={this.onInput('start')}
+        />
+        <ErrorList errors={errors} />
+        <Button onClick={this.onSubmit} disabled={!name}>
           Add Question
-        </button>
-       {Object.entries(errors)
-          .filter(([questionName, errors]) => errors.length > 0)
-          .map(([questionName, errors]) => (
-            <div key={questionName}>
-              <h4 className="text-danger">
-                Error for question {questionName}
-              </h4>
-              {errors.map(msg => (
-                <div key={msg} className="alert alert-danger">
-                  {msg}
-                </div>
-              ))}
-            </div>
-        ))}
+        </Button>
       </div>
     )
   }
 }
-
 
 
 const mapStateToProps = state => ({
