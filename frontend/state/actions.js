@@ -1,6 +1,9 @@
 module.exports = {
   question: {
-    add: (name) => ({type: 'ADD_QUESTION', name}),
+    add: (question) => ({type: 'ADD_QUESTION', question}),
     remove: (name) => (({type: 'REMOVE_QUESTION', name}))
+  },
+  script: {
+    upload: script => ({type: 'UPLOAD_SCRIPT', script}),
   }
 }

@@ -1,4 +1,8 @@
 // initial state for the app
 module.exports = {
-  script: {}
+  script: {
+    start: null,
+    dataFields: [],
+    steps: {},
+  }
 };

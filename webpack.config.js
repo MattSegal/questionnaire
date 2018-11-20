@@ -1,9 +1,8 @@
-const path = require('path');
+const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
-  entry: [
-    './frontend/index.js'
-  ],
+  entry: './frontend/index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'main.js'
@@ -16,9 +15,9 @@ module.exports = {
         use: ['babel-loader']
       },
       {
-        test: /\.scss$/,
+        test: /\.module\.scss$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -28,9 +27,20 @@ module.exports = {
           },
           'sass-loader'
         ]
-      }
+      },
+      {
+        test: /\.global\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
+      },
     ]
   },
+  plugins: [
+    new MiniCssExtractPlugin({ filename: "main.css" })
+  ],
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     modules: [

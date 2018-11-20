@@ -3,20 +3,35 @@ const question = {
     ...state,
     script: {
       ...state.script,
-      [action.name]: {},
+      start: action.question.start ? action.question.start : state.script.start,
+      dataFields: [...new Set([...state.script.dataFields, action.question.name])],
+      steps: {
+        ...state.script.steps,
+        [action.question.name]: action.question,
+      }
     }
   }),
   REMOVE_QUESTION: (state, action) => ({
     ...state,
-    script: Object.keys(state.script)
+    script: {
+      ...state.script,
+      steps: Object.keys(state.script.steps)
       .filter(key => key !== action.name)
       .reduce((newScript, key) => ({ ...newScript, [key]: state.script[key] }), {}),
+    }
   }),
 }
 
+const script = {
+  UPLOAD_SCRIPT: (state, action) => ({
+    ...state,
+    script: action.script,
+  })
+}
 
 const reducers = {
   ...question,
+  ...script,
 }
 
 
