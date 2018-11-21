@@ -50,7 +50,6 @@ export default class ScriptValidator {
   validateFieldWhitelist  = q => {
     for (let fieldName of Object.keys(q)) {
       if (!FIELD_KEYS.includes(fieldName)) {
-        console.error(fieldName, FIELD_KEYS)
         this.addError(`Field "${fieldName}" is not allowed.`)
       }
     }
@@ -58,8 +57,11 @@ export default class ScriptValidator {
 
   // Validate the 'start' field.
   validateStart = q => {
-    const startAreadyExists = Object.values(this.script).some(question => question.start)
-    if (startAreadyExists && q.start) {
+    const numStarts = Object.values(this.script)
+      .filter(question => q.name !== question.name)
+      .map(question => question.start ? 1 : 0)
+      .reduce((count, num) => count + num, 0)
+    if (numStarts > 0 && q.start) {
       this.addError('Cannot have two start questions.')
     } else if (typeof(q.start) !== "boolean") {
       this.addError('Start field must be "true" or "false"')

@@ -1,18 +1,32 @@
 const question = {
-  ADD_QUESTION: (state, action) => ({
+  CREATE_QUESTION: (state, action) => ({
     ...state,
     script: {
       ...state.script,
-      [action.question.name]: action.question,
+      [action.name]: {
+        name: action.name,
+      },
     }
   }),
-  REMOVE_QUESTION: (state, action) => ({
-    ...state,
-    script: Object.keys(state.script)
-      .filter(key => key !== action.name)
-      .reduce((obj, key) => ({ ...obj, [key]: state.script[key] }), {}),
-  }),
+  UPDATE_QUESTION: (state, action) => {
+    const script = {...state.script}
+    delete script[action.prevName]
+    script[action.question.name] = action.question
+    return {
+      ...state,
+      script: script
+    }
+  },
+  REMOVE_QUESTION: (state, action) => {
+    const script = {...state.script}
+    delete script[action.name]
+    return {
+      ...state,
+      script: script,
+    }
+  },
 }
+
 
 const script = {
   UPLOAD_SCRIPT: (state, action) => ({

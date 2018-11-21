@@ -1,7 +1,7 @@
 import React from 'react'
 
 module.exports = ({ label, placeholder, value, onChange, options, disabled }) => (
-  <div className="input-group mb-3">
+  <div className="input-group">
     <div className="input-group-prepend">
       <span className="input-group-text">{ label }</span>
     </div>

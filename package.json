@@ -4,6 +4,7 @@
   "author": "Matthew Segal",
   "license": "ISC",
   "scripts": {
+    "server": "webpack-dev-server --config webpack.config.js --colors --progress --profile --inline --hot",
     "watch": "webpack --config webpack.config.js --mode development --progress --watch",
     "build": "webpack --config webpack.config.js --mode production"
   },
@@ -27,15 +28,19 @@
   },
   "dependencies": {
     "bootstrap": "4.1.3",
+    "graphdracula": "^1.2.1",
     "mini-css-extract-plugin": "^0.4.4",
     "node-sass": "^4.10.0",
     "prop-types": "^15.6.1",
+    "raphael": "^2.2.7",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "sass-loader": "^7.1.0"
+    "sass-loader": "^7.1.0",
+    "webpack-dev-server": "^3.1.10"
   }
 }

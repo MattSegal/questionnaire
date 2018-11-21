@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+
 import { actions } from 'state'
 
 
 export default class Header extends Component {
-
 
   onUploadClick = e => this.input.click()
   onUploadChange = e => {
@@ -38,10 +39,25 @@ export default class Header extends Component {
           ref={r => { this.input = r; }}
         />
         <DownloadLink script={script}>
-          <button className="btn btn-secondary">
+          <button className="btn btn-secondary mr-1">
             Download
           </button>
         </DownloadLink>
+        <Link to="/graph">
+          <button className="btn btn-secondary mr-1">
+            View Graph
+          </button>
+        </Link>
+        <Link to="/">
+          <button className="btn btn-secondary mr-1">
+            Builder
+          </button>
+        </Link>
+        <Link to="/test">
+          <button className="btn btn-secondary">
+            Test
+          </button>
+        </Link>
       </div>
     )
   }
@@ -49,7 +65,7 @@ export default class Header extends Component {
 
 
 const DownloadLink = ({ script, children }) => {
-  const json = JSON.stringify(script)
+  const json = JSON.stringify(script, null, 2)
   const data = "text/json;charset=utf-8," + encodeURIComponent(json);
     return (
       <a href={`data:${data}`} download="script.json">

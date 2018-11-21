@@ -1,11 +1,26 @@
+const webpack = require('webpack')
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   entry: './frontend/index.js',
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'main.js'
+  },
+  devServer: {
+    stats: {
+      warnings: false,
+      performance: false,
+    },
+    contentBase: path.join(__dirname, 'dist'),
+    compress: false,
+    historyApiFallback: true,
+    port: 9000
+  },
+  devtool: 'cheap-module-eval-source-map',
+  optimization: {
+    minimize: false
   },
   module: {
     rules: [
@@ -39,7 +54,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({ filename: "main.css" })
+    new MiniCssExtractPlugin({ filename: "main.css" }),
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx'],
